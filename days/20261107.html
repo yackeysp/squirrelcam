@@ -1,0 +1,1901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SquirrelCam • November 7, 2026</title>
+    <style>
+    :root {
+        --forest: #244c32;
+        --forest-light: #347046;
+        --cream: #f5f4ee;
+        --card: #ffffff;
+        --text: #1f2923;
+        --muted: #68746c;
+        --border: #dce3dd;
+        --blue: #2f80c9;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        color: var(--text);
+        background: var(--cream);
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    header {
+        color: white;
+        padding: 30px 20px;
+        text-align: center;
+        background: linear-gradient(135deg, var(--forest), var(--forest-light));
+    }
+
+    header h1 {
+        margin: 0;
+        font-size: clamp(34px, 7vw, 52px);
+    }
+
+    header p {
+        margin: 8px 0 0;
+        opacity: 0.9;
+    }
+
+    main {
+        width: min(1200px, calc(100% - 28px));
+        margin: 28px auto 60px;
+    }
+
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+        margin-bottom: 28px;
+    }
+
+    .dashboard-card,
+    .event-card,
+    .history-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        box-shadow: 0 5px 18px rgba(31, 41, 35, 0.08);
+    }
+
+    .dashboard-card {
+        padding: 22px;
+    }
+
+    .metric {
+        margin-top: 10px;
+        color: var(--forest);
+        font-size: 42px;
+        font-weight: bold;
+    }
+
+    .water-status {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        color: var(--muted);
+        font-weight: bold;
+    }
+
+    .water-track {
+        height: 24px;
+        overflow: hidden;
+        margin-top: 14px;
+        border-radius: 999px;
+        background: #dceaf4;
+    }
+
+    .water-fill {
+        width: 0%;
+        height: 100%;
+        background: linear-gradient(90deg, #52a9e3, var(--blue));
+    }
+
+    .section-title {
+        margin: 34px 0 16px;
+    }
+
+    .event-card {
+        padding: 20px;
+        margin-bottom: 22px;
+    }
+
+    .event-heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 18px;
+        margin-bottom: 16px;
+    }
+
+    .event-heading h3 {
+        margin: 0;
+    }
+
+    .event-subtitle {
+        margin-top: 5px;
+        color: var(--muted);
+        font-size: 14px;
+    }
+
+    .event-actions {
+        display: flex;
+        gap: 8px;
+    }
+
+    .stat-button {
+        padding: 8px 11px;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        background: #f7f9f7;
+        color: var(--muted);
+    }
+
+    .camera-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+    }
+
+    .camera-panel {
+        overflow: hidden;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        background: #101511;
+    }
+
+    .camera-label {
+        padding: 9px 12px;
+        color: white;
+        background: rgba(36, 76, 50, 0.96);
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    video {
+        display: block;
+        width: 100%;
+        background: black;
+    }
+
+    .camera-unavailable {
+        min-height: 260px;
+        background: #e9edea;
+    }
+
+    .unavailable-message {
+        display: grid;
+        min-height: 220px;
+        place-items: center;
+        padding: 24px;
+        color: var(--muted);
+        text-align: center;
+    }
+
+    .latest-image {
+        width: 100%;
+        border-radius: 12px;
+    }
+
+    .history-card {
+        padding: 18px;
+    }
+
+    .history-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 13px 4px;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .history-row:last-child {
+        border-bottom: 0;
+    }
+
+    a {
+        color: var(--forest-light);
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+    .back-link {
+        display: inline-block;
+        margin-bottom: 20px;
+    }
+
+    footer {
+        padding: 24px;
+        color: var(--muted);
+        text-align: center;
+    }
+
+    @media (max-width: 760px) {
+        .dashboard-grid,
+        .camera-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .event-heading {
+            flex-direction: column;
+        }
+
+        .camera-unavailable {
+            min-height: 210px;
+        }
+
+        .unavailable-message {
+            min-height: 170px;
+        }
+    }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>🐿️ SquirrelCam</h1>
+    <p>Dual-camera squirrel detection and deterrent system</p>
+</header>
+
+
+        <main>
+            <a class="back-link" href="../index.html">← Back to dashboard</a>
+            <h2>November 7, 2026</h2>
+            <p><strong>42 spray events</strong></p>
+            
+    <article class="event-card" data-event-id="20261107-161654">
+        <div class="event-heading">
+            <div>
+                <h3>November 7, 2026 • 4:16 PM</h3>
+                <div class="event-subtitle">Spray event</div>
+            </div>
+
+            <div class="event-actions">
+                <button class="stat-button" disabled title="Likes coming soon">
+                    ❤️ <span>0</span>
+                </button>
+                <button class="stat-button" disabled title="Views coming soon">
+                    👁 <span>0</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="camera-grid">
+            
+        <div class="camera-panel">
+            <div class="camera-label">Color Camera</div>
+            <video controls playsinline preload="metadata">
+                <source src="../videos/archive/20261107-161654_spray.mp4" type="video/mp4">
+                Your browser does not support video playback.
+            </video>
+        </div>
+        
+            
+    <div class="camera-panel camera-unavailable">
+        <div class="camera-label">Global-Shutter Reaction Camera</div>
+        <div class="unavailable-message">
+            Reaction camera was not available for this event
+        </div>
+    </div>
+    
+        </div>
+    </article>
+    
+
+    <article class="event-card" data-event-id="20261107-161543">
+        <div class="event-heading">
+            <div>
+                <h3>November 7, 2026 • 4:15 PM</h3>
+                <div class="event-subtitle">Spray event</div>
+            </div>
+
+            <div class="event-actions">
+                <button class="stat-button" disabled title="Likes coming soon">
+                    ❤️ <span>0</span>
+                </button>
+                <button class="stat-button" disabled title="Views coming soon">
+                    👁 <span>0</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="camera-grid">
+            
+        <div class="camera-panel">
+            <div class="camera-label">Color Camera</div>
+            <video controls playsinline preload="metadata">
+                <source src="../videos/archive/20261107-161543_spray.mp4" type="video/mp4">
+                Your browser does not support video playback.
+            </video>
+        </div>
+        
+            
+    <div class="camera-panel camera-unavailable">
+        <div class="camera-label">Global-Shutter Reaction Camera</div>
+        <div class="unavailable-message">
+            Reaction camera was not available for this event
+        </div>
+    </div>
+    
+        </div>
+    </article>
+    
+
+    <article class="event-card" data-event-id="20261107-161502">
+        <div class="event-heading">
+            <div>
+                <h3>November 7, 2026 • 4:15 PM</h3>
+                <div class="event-subtitle">Spray event</div>
+            </div>
+
+            <div class="event-actions">
+                <button class="stat-button" disabled title="Likes coming soon">
+                    ❤️ <span>0</span>
+                </button>
+                <button class="stat-button" disabled title="Views coming soon">
+                    👁 <span>0</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="camera-grid">
+            
+        <div class="camera-panel">
+            <div class="camera-label">Color Camera</div>
+            <video controls playsinline preload="metadata">
+                <source src="../videos/archive/20261107-161502_spray.mp4" type="video/mp4">
+                Your browser does not support video playback.
+            </video>
+        </div>
+        
+            
+    <div class="camera-panel camera-unavailable">
+        <div class="camera-label">Global-Shutter Reaction Camera</div>
+        <div class="unavailable-message">
+            Reaction camera was not available for this event
+        </div>
+    </div>
+    
+        </div>
+    </article>
+    
+
+    <article class="event-card" data-event-id="20261107-161446">
+        <div class="event-heading">
+            <div>
+                <h3>November 7, 2026 • 4:14 PM</h3>
+                <div class="event-subtitle">Spray event</div>
+            </div>
+
+            <div class="event-actions">
+                <button class="stat-button" disabled title="Likes coming soon">
+                    ❤️ <span>0</span>
+                </button>
+                <button class="stat-button" disabled title="Views coming soon">
+                    👁 <span>0</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="camera-grid">
+            
+        <div class="camera-panel">
+            <div class="camera-label">Color Camera</div>
+            <video controls playsinline preload="metadata">
+                <source src="../videos/archive/20261107-161446_spray.mp4" type="video/mp4">
+                Your browser does not support video playback.
+            </video>
+        </div>
+        
+            
+    <div class="camera-panel camera-unavailable">
+        <div class="camera-label">Global-Shutter Reaction Camera</div>
+        <div class="unavailable-message">
+            Reaction camera was not available for this event
+        </div>
+    </div>
+    
+        </div>
+    </article>
+    
+
+    <article class="event-card" data-event-id="20261107-161421">
+        <div class="event-heading">
+            <div>
+                <h3>November 7, 2026 • 4:14 PM</h3>
+                <div class="event-subtitle">Spray event</div>
+            </div>
+
+            <div class="event-actions">
+                <button class="stat-button" disabled title="Likes coming soon">
+                    ❤️ <span>0</span>
+                </button>
+                <button class="stat-button" disabled title="Views coming soon">
+                    👁 <span>0</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="camera-grid">
+            
+        <div class="camera-panel">
+            <div class="camera-label">Color Camera</div>
+            <video controls playsinline preload="metadata">
+                <source src="../videos/archive/20261107-161421_spray.mp4" type="video/mp4">
+                Your browser does not support video playback.
+            </video>
+        </div>
+        
+            
+    <div class="camera-panel camera-unavailable">
+        <div class="camera-label">Global-Shutter Reaction Camera</div>
+        <div class="unavailable-message">
+            Reaction camera was not available for this event
+        </div>
+    </div>
+    
+        </div>
+    </article>
+    
+
+    <article class="event-card" data-event-id="20261107-161350">
+        <div class="event-heading">
+            <div>
+                <h3>November 7, 2026 • 4:13 PM</h3>
+                <div class="event-subtitle">Spray event</div>
+            </div>
+
+            <div class="event-actions">
+                <button class="stat-button" disabled title="Likes coming soon">
+                    ❤️ <span>0</span>
+                </button>
+                <button class="stat-button" disabled title="Views coming soon">
+                    👁 <span>0</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="camera-grid">
+            
+        <div class="camera-panel">
+            <div class="camera-label">Color Camera</div>
+            <video controls playsinline preload="metadata">
+                <source src="../videos/archive/20261107-161350_spray.mp4" type="video/mp4">
+                Your browser does not support video playback.
+            </video>
+        </div>
+        
+            
+    <div class="camera-panel camera-unavailable">
+        <div class="camera-label">Global-Shutter Reaction Camera</div>
+        <div class="unavailable-message">
+            Reaction camera was not available for this event
+        </div>
+    </div>
+    
+        </div>
+    </article>
+    
+
+    <article class="event-card" data-event-id="20261107-161319">
+        <div class="event-heading">
+            <div>
+                <h3>November 7, 2026 • 4:13 PM</h3>
+                <div class="event-subtitle">Spray event</div>
+            </div>
+
+            <div class="event-actions">
+                <button class="stat-button" disabled title="Likes coming soon">
+                    ❤️ <span>0</span>
+                </button>
+                <button class="stat-button" disabled title="Views coming soon">
+                    👁 <span>0</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="camera-grid">
+            
+        <div class="camera-panel">
+            <div class="camera-label">Color Camera</div>
+            <video controls playsinline preload="metadata">
+                <source src="../videos/archive/20261107-161319_spray.mp4" type="video/mp4">
+                Your browser does not support video playback.
+            </video>
+        </div>
+        
+            
+    <div class="camera-panel camera-unavailable">
+        <div class="camera-label">Global-Shutter Reaction Camera</div>
+        <div class="unavailable-message">
+            Reaction camera was not available for this event
+        </div>
+    </div>
+    
+        </div>
+    </article>
+    
+
+    <article class="event-card" data-event-id="20261107-161039">
+        <div class="event-heading">
+            <div>
+                <h3>November 7, 2026 • 4:10 PM</h3>
+                <div class="event-subtitle">Spray event</div>
+            </div>
+
+            <div class="event-actions">
+                <button class="stat-button" disabled title="Likes coming soon">
+                    ❤️ <span>0</span>
+                </button>
+                <button class="stat-button" disabled title="Views coming soon">
+                    👁 <span>0</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="camera-grid">
+            
+        <div class="camera-panel">
+            <div class="camera-label">Color Camera</div>
+            <video controls playsinline preload="metadata">
+                <source src="../videos/archive/20261107-161039_spray.mp4" type="video/mp4">
+                Your browser does not support video playback.
+            </video>
+        </div>
+        
+            
+    <div class="camera-panel camera-unavailable">
+        <div class="camera-label">Global-Shutter Reaction Camera</div>
+        <div class="unavailable-message">
+            Reaction camera was not available for this event
+        </div>
+    </div>
+    
+        </div>
+    </article>
+    
+
+    <article class="event-card" data-event-id="20261107-161008">
+        <div class="event-heading">
+            <div>
+                <h3>November 7, 2026 • 4:10 PM</h3>
+                <div class="event-subtitle">Spray event</div>
+            </div>
+
+            <div class="event-actions">
+                <button class="stat-button" disabled title="Likes coming soon">
+                    ❤️ <span>0</span>
+                </button>
+                <button class="stat-button" disabled title="Views coming soon">
+                    👁 <span>0</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="camera-grid">
+            
+        <div class="camera-panel">
+            <div class="camera-label">Color Camera</div>
+            <video controls playsinline preload="metadata">
+                <source src="../videos/archive/20261107-161008_spray.mp4" type="video/mp4">
+                Your browser does not support video playback.
+            </video>
+        </div>
+        
+            
+    <div class="camera-panel camera-unavailable">
+        <div class="camera-label">Global-Shutter Reaction Camera</div>
+        <div class="unavailable-message">
+            Reaction camera was not available for this event
+        </div>
+    </div>
+    
+        </div>
+    </article>
+    
+
+    <article class="event-card" data-event-id="20261107-160857">
+        <div class="event-heading">
+            <div>
+                <h3>November 7, 2026 • 4:08 PM</h3>
+                <div class="event-subtitle">Spray event</div>
+            </div>
+
+            <div class="event-actions">
+                <button class="stat-button" disabled title="Likes coming soon">
+                    ❤️ <span>0</span>
+                </button>
+                <button class="stat-button" disabled title="Views coming soon">
+                    👁 <span>0</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="camera-grid">
+            
+        <div class="camera-panel">
+            <div class="camera-label">Color Camera</div>
+            <video controls playsinline preload="metadata">
+                <source src="../videos/archive/20261107-160857_spray.mp4" type="video/mp4">
+                Your browser does not support video playback.
+            </video>
+        </div>
+        
+            
+    <div class="camera-panel camera-unavailable">
+        <div class="camera-label">Global-Shutter Reaction Camera</div>
+        <div class="unavailable-message">
+            Reaction camera was not available for this event
+        </div>
+    </div>
+    
+        </div>
+    </article>
+    
+
+    <article class="event-card" data-event-id="20261107-160217">
+        <div class="event-heading">
+            <div>
+                <h3>November 7, 2026 • 4:02 PM</h3>
+                <div class="event-subtitle">Spray event</div>
+            </div>
+
+            <div class="event-actions">
+                <button class="stat-button" disabled title="Likes coming soon">
+                    ❤️ <span>0</span>
+                </button>
+                <button class="stat-button" disabled title="Views coming soon">
+                    👁 <span>0</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="camera-grid">
+            
+        <div class="camera-panel">
+            <div class="camera-label">Color Camera</div>
+            <video controls playsinline preload="metadata">
+                <source src="../videos/archive/20261107-160217_spray.mp4" type="video/mp4">
+                Your browser does not support video playback.
+            </video>
+        </div>
+        
+            
+    <div class="camera-panel camera-unavailable">
+        <div class="camera-label">Global-Shutter Reaction Camera</div>
+        <div class="unavailable-message">
+            Reaction camera was not available for this event
+        </div>
+    </div>
+    
+        </div>
+    </article>
+    
+
+    <article class="event-card" data-event-id="20261107-155936">
+        <div class="event-heading">
+            <div>
+                <h3>November 7, 2026 • 3:59 PM</h3>
+                <div class="event-subtitle">Spray event</div>
+            </div>
+
+            <div class="event-actions">
+                <button class="stat-button" disabled title="Likes coming soon">
+                    ❤️ <span>0</span>
+                </button>
+                <button class="stat-button" disabled title="Views coming soon">
+                    👁 <span>0</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="camera-grid">
+            
+        <div class="camera-panel">
+            <div class="camera-label">Color Camera</div>
+            <video controls playsinline preload="metadata">
+                <source src="../videos/archive/20261107-155936_spray.mp4" type="video/mp4">
+                Your browser does not support video playback.
+            </video>
+        </div>
+        
+            
+    <div class="camera-panel camera-unavailable">
+        <div class="camera-label">Global-Shutter Reaction Camera</div>
+        <div class="unavailable-message">
+            Reaction camera was not available for this event
+        </div>
+    </div>
+    
+        </div>
+    </article>
+    
+
+    <article class="event-card" data-event-id="20261107-155920">
+        <div class="event-heading">
+            <div>
+                <h3>November 7, 2026 • 3:59 PM</h3>
+                <div class="event-subtitle">Spray event</div>
+            </div>
+
+            <div class="event-actions">
+                <button class="stat-button" disabled title="Likes coming soon">
+                    ❤️ <span>0</span>
+                </button>
+                <button class="stat-button" disabled title="Views coming soon">
+                    👁 <span>0</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="camera-grid">
+            
+        <div class="camera-panel">
+            <div class="camera-label">Color Camera</div>
+            <video controls playsinline preload="metadata">
+                <source src="../videos/archive/20261107-155920_spray.mp4" type="video/mp4">
+                Your browser does not support video playback.
+            </video>
+        </div>
+        
+            
+    <div class="camera-panel camera-unavailable">
+        <div class="camera-label">Global-Shutter Reaction Camera</div>
+        <div class="unavailable-message">
+            Reaction camera was not available for this event
+        </div>
+    </div>
+    
+        </div>
+    </article>
+    
+
+    <article class="event-card" data-event-id="20261107-155904">
+        <div class="event-heading">
+            <div>
+                <h3>November 7, 2026 • 3:59 PM</h3>
+                <div class="event-subtitle">Spray event</div>
+            </div>
+
+            <div class="event-actions">
+                <button class="stat-button" disabled title="Likes coming soon">
+                    ❤️ <span>0</span>
+                </button>
+                <button class="stat-button" disabled title="Views coming soon">
+                    👁 <span>0</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="camera-grid">
+            
+        <div class="camera-panel">
+            <div class="camera-label">Color Camera</div>
+            <video controls playsinline preload="metadata">
+                <source src="../videos/archive/20261107-155904_spray.mp4" type="video/mp4">
+                Your browser does not support video playback.
+            </video>
+        </div>
+        
+            
+    <div class="camera-panel camera-unavailable">
+        <div class="camera-label">Global-Shutter Reaction Camera</div>
+        <div class="unavailable-message">
+            Reaction camera was not available for this event
+        </div>
+    </div>
+    
+        </div>
+    </article>
+    
+
+    <article class="event-card" data-event-id="20261107-155849">
+        <div class="event-heading">
+            <div>
+                <h3>November 7, 2026 • 3:58 PM</h3>
+                <div class="event-subtitle">Spray event</div>
+            </div>
+
+            <div class="event-actions">
+                <button class="stat-button" disabled title="Likes coming soon">
+                    ❤️ <span>0</span>
+                </button>
+                <button class="stat-button" disabled title="Views coming soon">
+                    👁 <span>0</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="camera-grid">
+            
+        <div class="camera-panel">
+            <div class="camera-label">Color Camera</div>
+            <video controls playsinline preload="metadata">
+                <source src="../videos/archive/20261107-155849_spray.mp4" type="video/mp4">
+                Your browser does not support video playback.
+            </video>
+        </div>
+        
+            
+    <div class="camera-panel camera-unavailable">
+        <div class="camera-label">Global-Shutter Reaction Camera</div>
+        <div class="unavailable-message">
+            Reaction camera was not available for this event
+        </div>
+    </div>
+    
+        </div>
+    </article>
+    
+
+    <article class="event-card" data-event-id="20261107-155608">
+        <div class="event-heading">
+            <div>
+                <h3>November 7, 2026 • 3:56 PM</h3>
+                <div class="event-subtitle">Spray event</div>
+            </div>
+
+            <div class="event-actions">
+                <button class="stat-button" disabled title="Likes coming soon">
+                    ❤️ <span>0</span>
+                </button>
+                <button class="stat-button" disabled title="Views coming soon">
+                    👁 <span>0</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="camera-grid">
+            
+        <div class="camera-panel">
+            <div class="camera-label">Color Camera</div>
+            <video controls playsinline preload="metadata">
+                <source src="../videos/archive/20261107-155608_spray.mp4" type="video/mp4">
+                Your browser does not support video playback.
+            </video>
+        </div>
+        
+            
+    <div class="camera-panel camera-unavailable">
+        <div class="camera-label">Global-Shutter Reaction Camera</div>
+        <div class="unavailable-message">
+            Reaction camera was not available for this event
+        </div>
+    </div>
+    
+        </div>
+    </article>
+    
+
+    <article class="event-card" data-event-id="20261107-155537">
+        <div class="event-heading">
+            <div>
+                <h3>November 7, 2026 • 3:55 PM</h3>
+                <div class="event-subtitle">Spray event</div>
+            </div>
+
+            <div class="event-actions">
+                <button class="stat-button" disabled title="Likes coming soon">
+                    ❤️ <span>0</span>
+                </button>
+                <button class="stat-button" disabled title="Views coming soon">
+                    👁 <span>0</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="camera-grid">
+            
+        <div class="camera-panel">
+            <div class="camera-label">Color Camera</div>
+            <video controls playsinline preload="metadata">
+                <source src="../videos/archive/20261107-155537_spray.mp4" type="video/mp4">
+                Your browser does not support video playback.
+            </video>
+        </div>
+        
+            
+    <div class="camera-panel camera-unavailable">
+        <div class="camera-label">Global-Shutter Reaction Camera</div>
+        <div class="unavailable-message">
+            Reaction camera was not available for this event
+        </div>
+    </div>
+    
+        </div>
+    </article>
+    
+
+    <article class="event-card" data-event-id="20261107-155517">
+        <div class="event-heading">
+            <div>
+                <h3>November 7, 2026 • 3:55 PM</h3>
+                <div class="event-subtitle">Spray event</div>
+            </div>
+
+            <div class="event-actions">
+                <button class="stat-button" disabled title="Likes coming soon">
+                    ❤️ <span>0</span>
+                </button>
+                <button class="stat-button" disabled title="Views coming soon">
+                    👁 <span>0</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="camera-grid">
+            
+        <div class="camera-panel">
+            <div class="camera-label">Color Camera</div>
+            <video controls playsinline preload="metadata">
+                <source src="../videos/archive/20261107-155517_spray.mp4" type="video/mp4">
+                Your browser does not support video playback.
+            </video>
+        </div>
+        
+            
+    <div class="camera-panel camera-unavailable">
+        <div class="camera-label">Global-Shutter Reaction Camera</div>
+        <div class="unavailable-message">
+            Reaction camera was not available for this event
+        </div>
+    </div>
+    
+        </div>
+    </article>
+    
+
+    <article class="event-card" data-event-id="20261107-155441">
+        <div class="event-heading">
+            <div>
+                <h3>November 7, 2026 • 3:54 PM</h3>
+                <div class="event-subtitle">Spray event</div>
+            </div>
+
+            <div class="event-actions">
+                <button class="stat-button" disabled title="Likes coming soon">
+                    ❤️ <span>0</span>
+                </button>
+                <button class="stat-button" disabled title="Views coming soon">
+                    👁 <span>0</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="camera-grid">
+            
+        <div class="camera-panel">
+            <div class="camera-label">Color Camera</div>
+            <video controls playsinline preload="metadata">
+                <source src="../videos/archive/20261107-155441_spray.mp4" type="video/mp4">
+                Your browser does not support video playback.
+            </video>
+        </div>
+        
+            
+    <div class="camera-panel camera-unavailable">
+        <div class="camera-label">Global-Shutter Reaction Camera</div>
+        <div class="unavailable-message">
+            Reaction camera was not available for this event
+        </div>
+    </div>
+    
+        </div>
+    </article>
+    
+
+    <article class="event-card" data-event-id="20261107-155130">
+        <div class="event-heading">
+            <div>
+                <h3>November 7, 2026 • 3:51 PM</h3>
+                <div class="event-subtitle">Spray event</div>
+            </div>
+
+            <div class="event-actions">
+                <button class="stat-button" disabled title="Likes coming soon">
+                    ❤️ <span>0</span>
+                </button>
+                <button class="stat-button" disabled title="Views coming soon">
+                    👁 <span>0</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="camera-grid">
+            
+        <div class="camera-panel">
+            <div class="camera-label">Color Camera</div>
+            <video controls playsinline preload="metadata">
+                <source src="../videos/archive/20261107-155130_spray.mp4" type="video/mp4">
+                Your browser does not support video playback.
+            </video>
+        </div>
+        
+            
+    <div class="camera-panel camera-unavailable">
+        <div class="camera-label">Global-Shutter Reaction Camera</div>
+        <div class="unavailable-message">
+            Reaction camera was not available for this event
+        </div>
+    </div>
+    
+        </div>
+    </article>
+    
+
+    <article class="event-card" data-event-id="20261107-155114">
+        <div class="event-heading">
+            <div>
+                <h3>November 7, 2026 • 3:51 PM</h3>
+                <div class="event-subtitle">Spray event</div>
+            </div>
+
+            <div class="event-actions">
+                <button class="stat-button" disabled title="Likes coming soon">
+                    ❤️ <span>0</span>
+                </button>
+                <button class="stat-button" disabled title="Views coming soon">
+                    👁 <span>0</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="camera-grid">
+            
+        <div class="camera-panel">
+            <div class="camera-label">Color Camera</div>
+            <video controls playsinline preload="metadata">
+                <source src="../videos/archive/20261107-155114_spray.mp4" type="video/mp4">
+                Your browser does not support video playback.
+            </video>
+        </div>
+        
+            
+    <div class="camera-panel camera-unavailable">
+        <div class="camera-label">Global-Shutter Reaction Camera</div>
+        <div class="unavailable-message">
+            Reaction camera was not available for this event
+        </div>
+    </div>
+    
+        </div>
+    </article>
+    
+
+    <article class="event-card" data-event-id="20261107-155059">
+        <div class="event-heading">
+            <div>
+                <h3>November 7, 2026 • 3:50 PM</h3>
+                <div class="event-subtitle">Spray event</div>
+            </div>
+
+            <div class="event-actions">
+                <button class="stat-button" disabled title="Likes coming soon">
+                    ❤️ <span>0</span>
+                </button>
+                <button class="stat-button" disabled title="Views coming soon">
+                    👁 <span>0</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="camera-grid">
+            
+        <div class="camera-panel">
+            <div class="camera-label">Color Camera</div>
+            <video controls playsinline preload="metadata">
+                <source src="../videos/archive/20261107-155059_spray.mp4" type="video/mp4">
+                Your browser does not support video playback.
+            </video>
+        </div>
+        
+            
+    <div class="camera-panel camera-unavailable">
+        <div class="camera-label">Global-Shutter Reaction Camera</div>
+        <div class="unavailable-message">
+            Reaction camera was not available for this event
+        </div>
+    </div>
+    
+        </div>
+    </article>
+    
+
+    <article class="event-card" data-event-id="20261107-154318">
+        <div class="event-heading">
+            <div>
+                <h3>November 7, 2026 • 3:43 PM</h3>
+                <div class="event-subtitle">Spray event</div>
+            </div>
+
+            <div class="event-actions">
+                <button class="stat-button" disabled title="Likes coming soon">
+                    ❤️ <span>0</span>
+                </button>
+                <button class="stat-button" disabled title="Views coming soon">
+                    👁 <span>0</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="camera-grid">
+            
+        <div class="camera-panel">
+            <div class="camera-label">Color Camera</div>
+            <video controls playsinline preload="metadata">
+                <source src="../videos/archive/20261107-154318_spray.mp4" type="video/mp4">
+                Your browser does not support video playback.
+            </video>
+        </div>
+        
+            
+    <div class="camera-panel camera-unavailable">
+        <div class="camera-label">Global-Shutter Reaction Camera</div>
+        <div class="unavailable-message">
+            Reaction camera was not available for this event
+        </div>
+    </div>
+    
+        </div>
+    </article>
+    
+
+    <article class="event-card" data-event-id="20261107-154107">
+        <div class="event-heading">
+            <div>
+                <h3>November 7, 2026 • 3:41 PM</h3>
+                <div class="event-subtitle">Spray event</div>
+            </div>
+
+            <div class="event-actions">
+                <button class="stat-button" disabled title="Likes coming soon">
+                    ❤️ <span>0</span>
+                </button>
+                <button class="stat-button" disabled title="Views coming soon">
+                    👁 <span>0</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="camera-grid">
+            
+        <div class="camera-panel">
+            <div class="camera-label">Color Camera</div>
+            <video controls playsinline preload="metadata">
+                <source src="../videos/archive/20261107-154107_spray.mp4" type="video/mp4">
+                Your browser does not support video playback.
+            </video>
+        </div>
+        
+            
+    <div class="camera-panel camera-unavailable">
+        <div class="camera-label">Global-Shutter Reaction Camera</div>
+        <div class="unavailable-message">
+            Reaction camera was not available for this event
+        </div>
+    </div>
+    
+        </div>
+    </article>
+    
+
+    <article class="event-card" data-event-id="20261107-152027">
+        <div class="event-heading">
+            <div>
+                <h3>November 7, 2026 • 3:20 PM</h3>
+                <div class="event-subtitle">Spray event</div>
+            </div>
+
+            <div class="event-actions">
+                <button class="stat-button" disabled title="Likes coming soon">
+                    ❤️ <span>0</span>
+                </button>
+                <button class="stat-button" disabled title="Views coming soon">
+                    👁 <span>0</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="camera-grid">
+            
+        <div class="camera-panel">
+            <div class="camera-label">Color Camera</div>
+            <video controls playsinline preload="metadata">
+                <source src="../videos/archive/20261107-152027_spray.mp4" type="video/mp4">
+                Your browser does not support video playback.
+            </video>
+        </div>
+        
+            
+    <div class="camera-panel camera-unavailable">
+        <div class="camera-label">Global-Shutter Reaction Camera</div>
+        <div class="unavailable-message">
+            Reaction camera was not available for this event
+        </div>
+    </div>
+    
+        </div>
+    </article>
+    
+
+    <article class="event-card" data-event-id="20261107-151951">
+        <div class="event-heading">
+            <div>
+                <h3>November 7, 2026 • 3:19 PM</h3>
+                <div class="event-subtitle">Spray event</div>
+            </div>
+
+            <div class="event-actions">
+                <button class="stat-button" disabled title="Likes coming soon">
+                    ❤️ <span>0</span>
+                </button>
+                <button class="stat-button" disabled title="Views coming soon">
+                    👁 <span>0</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="camera-grid">
+            
+        <div class="camera-panel">
+            <div class="camera-label">Color Camera</div>
+            <video controls playsinline preload="metadata">
+                <source src="../videos/archive/20261107-151951_spray.mp4" type="video/mp4">
+                Your browser does not support video playback.
+            </video>
+        </div>
+        
+            
+    <div class="camera-panel camera-unavailable">
+        <div class="camera-label">Global-Shutter Reaction Camera</div>
+        <div class="unavailable-message">
+            Reaction camera was not available for this event
+        </div>
+    </div>
+    
+        </div>
+    </article>
+    
+
+    <article class="event-card" data-event-id="20261107-151935">
+        <div class="event-heading">
+            <div>
+                <h3>November 7, 2026 • 3:19 PM</h3>
+                <div class="event-subtitle">Spray event</div>
+            </div>
+
+            <div class="event-actions">
+                <button class="stat-button" disabled title="Likes coming soon">
+                    ❤️ <span>0</span>
+                </button>
+                <button class="stat-button" disabled title="Views coming soon">
+                    👁 <span>0</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="camera-grid">
+            
+        <div class="camera-panel">
+            <div class="camera-label">Color Camera</div>
+            <video controls playsinline preload="metadata">
+                <source src="../videos/archive/20261107-151935_spray.mp4" type="video/mp4">
+                Your browser does not support video playback.
+            </video>
+        </div>
+        
+            
+    <div class="camera-panel camera-unavailable">
+        <div class="camera-label">Global-Shutter Reaction Camera</div>
+        <div class="unavailable-message">
+            Reaction camera was not available for this event
+        </div>
+    </div>
+    
+        </div>
+    </article>
+    
+
+    <article class="event-card" data-event-id="20261107-151824">
+        <div class="event-heading">
+            <div>
+                <h3>November 7, 2026 • 3:18 PM</h3>
+                <div class="event-subtitle">Spray event</div>
+            </div>
+
+            <div class="event-actions">
+                <button class="stat-button" disabled title="Likes coming soon">
+                    ❤️ <span>0</span>
+                </button>
+                <button class="stat-button" disabled title="Views coming soon">
+                    👁 <span>0</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="camera-grid">
+            
+        <div class="camera-panel">
+            <div class="camera-label">Color Camera</div>
+            <video controls playsinline preload="metadata">
+                <source src="../videos/archive/20261107-151824_spray.mp4" type="video/mp4">
+                Your browser does not support video playback.
+            </video>
+        </div>
+        
+            
+    <div class="camera-panel camera-unavailable">
+        <div class="camera-label">Global-Shutter Reaction Camera</div>
+        <div class="unavailable-message">
+            Reaction camera was not available for this event
+        </div>
+    </div>
+    
+        </div>
+    </article>
+    
+
+    <article class="event-card" data-event-id="20261107-151749">
+        <div class="event-heading">
+            <div>
+                <h3>November 7, 2026 • 3:17 PM</h3>
+                <div class="event-subtitle">Spray event</div>
+            </div>
+
+            <div class="event-actions">
+                <button class="stat-button" disabled title="Likes coming soon">
+                    ❤️ <span>0</span>
+                </button>
+                <button class="stat-button" disabled title="Views coming soon">
+                    👁 <span>0</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="camera-grid">
+            
+        <div class="camera-panel">
+            <div class="camera-label">Color Camera</div>
+            <video controls playsinline preload="metadata">
+                <source src="../videos/archive/20261107-151749_spray.mp4" type="video/mp4">
+                Your browser does not support video playback.
+            </video>
+        </div>
+        
+            
+    <div class="camera-panel camera-unavailable">
+        <div class="camera-label">Global-Shutter Reaction Camera</div>
+        <div class="unavailable-message">
+            Reaction camera was not available for this event
+        </div>
+    </div>
+    
+        </div>
+    </article>
+    
+
+    <article class="event-card" data-event-id="20261107-151508">
+        <div class="event-heading">
+            <div>
+                <h3>November 7, 2026 • 3:15 PM</h3>
+                <div class="event-subtitle">Spray event</div>
+            </div>
+
+            <div class="event-actions">
+                <button class="stat-button" disabled title="Likes coming soon">
+                    ❤️ <span>0</span>
+                </button>
+                <button class="stat-button" disabled title="Views coming soon">
+                    👁 <span>0</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="camera-grid">
+            
+        <div class="camera-panel">
+            <div class="camera-label">Color Camera</div>
+            <video controls playsinline preload="metadata">
+                <source src="../videos/archive/20261107-151508_spray.mp4" type="video/mp4">
+                Your browser does not support video playback.
+            </video>
+        </div>
+        
+            
+    <div class="camera-panel camera-unavailable">
+        <div class="camera-label">Global-Shutter Reaction Camera</div>
+        <div class="unavailable-message">
+            Reaction camera was not available for this event
+        </div>
+    </div>
+    
+        </div>
+    </article>
+    
+
+    <article class="event-card" data-event-id="20261107-151437">
+        <div class="event-heading">
+            <div>
+                <h3>November 7, 2026 • 3:14 PM</h3>
+                <div class="event-subtitle">Spray event</div>
+            </div>
+
+            <div class="event-actions">
+                <button class="stat-button" disabled title="Likes coming soon">
+                    ❤️ <span>0</span>
+                </button>
+                <button class="stat-button" disabled title="Views coming soon">
+                    👁 <span>0</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="camera-grid">
+            
+        <div class="camera-panel">
+            <div class="camera-label">Color Camera</div>
+            <video controls playsinline preload="metadata">
+                <source src="../videos/archive/20261107-151437_spray.mp4" type="video/mp4">
+                Your browser does not support video playback.
+            </video>
+        </div>
+        
+            
+    <div class="camera-panel camera-unavailable">
+        <div class="camera-label">Global-Shutter Reaction Camera</div>
+        <div class="unavailable-message">
+            Reaction camera was not available for this event
+        </div>
+    </div>
+    
+        </div>
+    </article>
+    
+
+    <article class="event-card" data-event-id="20261107-151327">
+        <div class="event-heading">
+            <div>
+                <h3>November 7, 2026 • 3:13 PM</h3>
+                <div class="event-subtitle">Spray event</div>
+            </div>
+
+            <div class="event-actions">
+                <button class="stat-button" disabled title="Likes coming soon">
+                    ❤️ <span>0</span>
+                </button>
+                <button class="stat-button" disabled title="Views coming soon">
+                    👁 <span>0</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="camera-grid">
+            
+        <div class="camera-panel">
+            <div class="camera-label">Color Camera</div>
+            <video controls playsinline preload="metadata">
+                <source src="../videos/archive/20261107-151327_spray.mp4" type="video/mp4">
+                Your browser does not support video playback.
+            </video>
+        </div>
+        
+            
+    <div class="camera-panel camera-unavailable">
+        <div class="camera-label">Global-Shutter Reaction Camera</div>
+        <div class="unavailable-message">
+            Reaction camera was not available for this event
+        </div>
+    </div>
+    
+        </div>
+    </article>
+    
+
+    <article class="event-card" data-event-id="20261107-145416">
+        <div class="event-heading">
+            <div>
+                <h3>November 7, 2026 • 2:54 PM</h3>
+                <div class="event-subtitle">Spray event</div>
+            </div>
+
+            <div class="event-actions">
+                <button class="stat-button" disabled title="Likes coming soon">
+                    ❤️ <span>0</span>
+                </button>
+                <button class="stat-button" disabled title="Views coming soon">
+                    👁 <span>0</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="camera-grid">
+            
+        <div class="camera-panel">
+            <div class="camera-label">Color Camera</div>
+            <video controls playsinline preload="metadata">
+                <source src="../videos/archive/20261107-145416_spray.mp4" type="video/mp4">
+                Your browser does not support video playback.
+            </video>
+        </div>
+        
+            
+    <div class="camera-panel camera-unavailable">
+        <div class="camera-label">Global-Shutter Reaction Camera</div>
+        <div class="unavailable-message">
+            Reaction camera was not available for this event
+        </div>
+    </div>
+    
+        </div>
+    </article>
+    
+
+    <article class="event-card" data-event-id="20261107-145205">
+        <div class="event-heading">
+            <div>
+                <h3>November 7, 2026 • 2:52 PM</h3>
+                <div class="event-subtitle">Spray event</div>
+            </div>
+
+            <div class="event-actions">
+                <button class="stat-button" disabled title="Likes coming soon">
+                    ❤️ <span>0</span>
+                </button>
+                <button class="stat-button" disabled title="Views coming soon">
+                    👁 <span>0</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="camera-grid">
+            
+        <div class="camera-panel">
+            <div class="camera-label">Color Camera</div>
+            <video controls playsinline preload="metadata">
+                <source src="../videos/archive/20261107-145205_spray.mp4" type="video/mp4">
+                Your browser does not support video playback.
+            </video>
+        </div>
+        
+            
+    <div class="camera-panel camera-unavailable">
+        <div class="camera-label">Global-Shutter Reaction Camera</div>
+        <div class="unavailable-message">
+            Reaction camera was not available for this event
+        </div>
+    </div>
+    
+        </div>
+    </article>
+    
+
+    <article class="event-card" data-event-id="20261107-144824">
+        <div class="event-heading">
+            <div>
+                <h3>November 7, 2026 • 2:48 PM</h3>
+                <div class="event-subtitle">Spray event</div>
+            </div>
+
+            <div class="event-actions">
+                <button class="stat-button" disabled title="Likes coming soon">
+                    ❤️ <span>0</span>
+                </button>
+                <button class="stat-button" disabled title="Views coming soon">
+                    👁 <span>0</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="camera-grid">
+            
+        <div class="camera-panel">
+            <div class="camera-label">Color Camera</div>
+            <video controls playsinline preload="metadata">
+                <source src="../videos/archive/20261107-144824_spray.mp4" type="video/mp4">
+                Your browser does not support video playback.
+            </video>
+        </div>
+        
+            
+    <div class="camera-panel camera-unavailable">
+        <div class="camera-label">Global-Shutter Reaction Camera</div>
+        <div class="unavailable-message">
+            Reaction camera was not available for this event
+        </div>
+    </div>
+    
+        </div>
+    </article>
+    
+
+    <article class="event-card" data-event-id="20261107-144809">
+        <div class="event-heading">
+            <div>
+                <h3>November 7, 2026 • 2:48 PM</h3>
+                <div class="event-subtitle">Spray event</div>
+            </div>
+
+            <div class="event-actions">
+                <button class="stat-button" disabled title="Likes coming soon">
+                    ❤️ <span>0</span>
+                </button>
+                <button class="stat-button" disabled title="Views coming soon">
+                    👁 <span>0</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="camera-grid">
+            
+        <div class="camera-panel">
+            <div class="camera-label">Color Camera</div>
+            <video controls playsinline preload="metadata">
+                <source src="../videos/archive/20261107-144809_spray.mp4" type="video/mp4">
+                Your browser does not support video playback.
+            </video>
+        </div>
+        
+            
+    <div class="camera-panel camera-unavailable">
+        <div class="camera-label">Global-Shutter Reaction Camera</div>
+        <div class="unavailable-message">
+            Reaction camera was not available for this event
+        </div>
+    </div>
+    
+        </div>
+    </article>
+    
+
+    <article class="event-card" data-event-id="20261107-144728">
+        <div class="event-heading">
+            <div>
+                <h3>November 7, 2026 • 2:47 PM</h3>
+                <div class="event-subtitle">Spray event</div>
+            </div>
+
+            <div class="event-actions">
+                <button class="stat-button" disabled title="Likes coming soon">
+                    ❤️ <span>0</span>
+                </button>
+                <button class="stat-button" disabled title="Views coming soon">
+                    👁 <span>0</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="camera-grid">
+            
+        <div class="camera-panel">
+            <div class="camera-label">Color Camera</div>
+            <video controls playsinline preload="metadata">
+                <source src="../videos/archive/20261107-144728_spray.mp4" type="video/mp4">
+                Your browser does not support video playback.
+            </video>
+        </div>
+        
+            
+    <div class="camera-panel camera-unavailable">
+        <div class="camera-label">Global-Shutter Reaction Camera</div>
+        <div class="unavailable-message">
+            Reaction camera was not available for this event
+        </div>
+    </div>
+    
+        </div>
+    </article>
+    
+
+    <article class="event-card" data-event-id="20261107-144547">
+        <div class="event-heading">
+            <div>
+                <h3>November 7, 2026 • 2:45 PM</h3>
+                <div class="event-subtitle">Spray event</div>
+            </div>
+
+            <div class="event-actions">
+                <button class="stat-button" disabled title="Likes coming soon">
+                    ❤️ <span>0</span>
+                </button>
+                <button class="stat-button" disabled title="Views coming soon">
+                    👁 <span>0</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="camera-grid">
+            
+        <div class="camera-panel">
+            <div class="camera-label">Color Camera</div>
+            <video controls playsinline preload="metadata">
+                <source src="../videos/archive/20261107-144547_spray.mp4" type="video/mp4">
+                Your browser does not support video playback.
+            </video>
+        </div>
+        
+            
+    <div class="camera-panel camera-unavailable">
+        <div class="camera-label">Global-Shutter Reaction Camera</div>
+        <div class="unavailable-message">
+            Reaction camera was not available for this event
+        </div>
+    </div>
+    
+        </div>
+    </article>
+    
+
+    <article class="event-card" data-event-id="20261107-144207">
+        <div class="event-heading">
+            <div>
+                <h3>November 7, 2026 • 2:42 PM</h3>
+                <div class="event-subtitle">Spray event</div>
+            </div>
+
+            <div class="event-actions">
+                <button class="stat-button" disabled title="Likes coming soon">
+                    ❤️ <span>0</span>
+                </button>
+                <button class="stat-button" disabled title="Views coming soon">
+                    👁 <span>0</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="camera-grid">
+            
+        <div class="camera-panel">
+            <div class="camera-label">Color Camera</div>
+            <video controls playsinline preload="metadata">
+                <source src="../videos/archive/20261107-144207_spray.mp4" type="video/mp4">
+                Your browser does not support video playback.
+            </video>
+        </div>
+        
+            
+    <div class="camera-panel camera-unavailable">
+        <div class="camera-label">Global-Shutter Reaction Camera</div>
+        <div class="unavailable-message">
+            Reaction camera was not available for this event
+        </div>
+    </div>
+    
+        </div>
+    </article>
+    
+
+    <article class="event-card" data-event-id="20261107-142256">
+        <div class="event-heading">
+            <div>
+                <h3>November 7, 2026 • 2:22 PM</h3>
+                <div class="event-subtitle">Spray event</div>
+            </div>
+
+            <div class="event-actions">
+                <button class="stat-button" disabled title="Likes coming soon">
+                    ❤️ <span>0</span>
+                </button>
+                <button class="stat-button" disabled title="Views coming soon">
+                    👁 <span>0</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="camera-grid">
+            
+        <div class="camera-panel">
+            <div class="camera-label">Color Camera</div>
+            <video controls playsinline preload="metadata">
+                <source src="../videos/archive/20261107-142256_spray.mp4" type="video/mp4">
+                Your browser does not support video playback.
+            </video>
+        </div>
+        
+            
+    <div class="camera-panel camera-unavailable">
+        <div class="camera-label">Global-Shutter Reaction Camera</div>
+        <div class="unavailable-message">
+            Reaction camera was not available for this event
+        </div>
+    </div>
+    
+        </div>
+    </article>
+    
+
+    <article class="event-card" data-event-id="20261107-123715">
+        <div class="event-heading">
+            <div>
+                <h3>November 7, 2026 • 12:37 PM</h3>
+                <div class="event-subtitle">Spray event</div>
+            </div>
+
+            <div class="event-actions">
+                <button class="stat-button" disabled title="Likes coming soon">
+                    ❤️ <span>0</span>
+                </button>
+                <button class="stat-button" disabled title="Views coming soon">
+                    👁 <span>0</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="camera-grid">
+            
+        <div class="camera-panel">
+            <div class="camera-label">Color Camera</div>
+            <video controls playsinline preload="metadata">
+                <source src="../videos/archive/20261107-123715_spray.mp4" type="video/mp4">
+                Your browser does not support video playback.
+            </video>
+        </div>
+        
+            
+    <div class="camera-panel camera-unavailable">
+        <div class="camera-label">Global-Shutter Reaction Camera</div>
+        <div class="unavailable-message">
+            Reaction camera was not available for this event
+        </div>
+    </div>
+    
+        </div>
+    </article>
+    
+
+    <article class="event-card" data-event-id="20261107-120735">
+        <div class="event-heading">
+            <div>
+                <h3>November 7, 2026 • 12:07 PM</h3>
+                <div class="event-subtitle">Spray event</div>
+            </div>
+
+            <div class="event-actions">
+                <button class="stat-button" disabled title="Likes coming soon">
+                    ❤️ <span>0</span>
+                </button>
+                <button class="stat-button" disabled title="Views coming soon">
+                    👁 <span>0</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="camera-grid">
+            
+        <div class="camera-panel">
+            <div class="camera-label">Color Camera</div>
+            <video controls playsinline preload="metadata">
+                <source src="../videos/archive/20261107-120735_spray.mp4" type="video/mp4">
+                Your browser does not support video playback.
+            </video>
+        </div>
+        
+            
+    <div class="camera-panel camera-unavailable">
+        <div class="camera-label">Global-Shutter Reaction Camera</div>
+        <div class="unavailable-message">
+            Reaction camera was not available for this event
+        </div>
+    </div>
+    
+        </div>
+    </article>
+    
+        </main>
+        
+
+<footer>
+    SquirrelCam • Raspberry Pi wildlife monitoring
+</footer>
+
+
+
+</body>
+</html>
