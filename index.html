@@ -3,50 +3,238 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SquirrelCam</title>
-
+    <title>SquirrelCam Dashboard</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            text-align: center;
+    :root {
+        --forest: #244c32;
+        --forest-light: #347046;
+        --cream: #f5f4ee;
+        --card: #ffffff;
+        --text: #1f2923;
+        --muted: #68746c;
+        --border: #dce3dd;
+        --blue: #2f80c9;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        color: var(--text);
+        background: var(--cream);
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    header {
+        color: white;
+        padding: 30px 20px;
+        text-align: center;
+        background: linear-gradient(135deg, var(--forest), var(--forest-light));
+    }
+
+    header h1 {
+        margin: 0;
+        font-size: clamp(34px, 7vw, 52px);
+    }
+
+    header p {
+        margin: 8px 0 0;
+        opacity: 0.9;
+    }
+
+    main {
+        width: min(1200px, calc(100% - 28px));
+        margin: 28px auto 60px;
+    }
+
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+        margin-bottom: 28px;
+    }
+
+    .dashboard-card,
+    .event-card,
+    .history-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        box-shadow: 0 5px 18px rgba(31, 41, 35, 0.08);
+    }
+
+    .dashboard-card {
+        padding: 22px;
+    }
+
+    .metric {
+        margin-top: 10px;
+        color: var(--forest);
+        font-size: 42px;
+        font-weight: bold;
+    }
+
+    .water-status {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        color: var(--muted);
+        font-weight: bold;
+    }
+
+    .water-track {
+        height: 24px;
+        overflow: hidden;
+        margin-top: 14px;
+        border-radius: 999px;
+        background: #dceaf4;
+    }
+
+    .water-fill {
+        width: 0%;
+        height: 100%;
+        background: linear-gradient(90deg, #52a9e3, var(--blue));
+    }
+
+    .section-title {
+        margin: 34px 0 16px;
+    }
+
+    .event-card {
+        padding: 20px;
+        margin-bottom: 22px;
+    }
+
+    .event-heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 18px;
+        margin-bottom: 16px;
+    }
+
+    .event-heading h3 {
+        margin: 0;
+    }
+
+    .event-subtitle {
+        margin-top: 5px;
+        color: var(--muted);
+        font-size: 14px;
+    }
+
+    .event-actions {
+        display: flex;
+        gap: 8px;
+    }
+
+    .stat-button {
+        padding: 8px 11px;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        background: #f7f9f7;
+        color: var(--muted);
+    }
+
+    .camera-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+    }
+
+    .camera-panel {
+        overflow: hidden;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        background: #101511;
+    }
+
+    .camera-label {
+        padding: 9px 12px;
+        color: white;
+        background: rgba(36, 76, 50, 0.96);
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    video {
+        display: block;
+        width: 100%;
+        background: black;
+    }
+
+    .camera-unavailable {
+        min-height: 260px;
+        background: #e9edea;
+    }
+
+    .unavailable-message {
+        display: grid;
+        min-height: 220px;
+        place-items: center;
+        padding: 24px;
+        color: var(--muted);
+        text-align: center;
+    }
+
+    .latest-image {
+        width: 100%;
+        border-radius: 12px;
+    }
+
+    .history-card {
+        padding: 18px;
+    }
+
+    .history-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 13px 4px;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .history-row:last-child {
+        border-bottom: 0;
+    }
+
+    a {
+        color: var(--forest-light);
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+    .back-link {
+        display: inline-block;
+        margin-bottom: 20px;
+    }
+
+    footer {
+        padding: 24px;
+        color: var(--muted);
+        text-align: center;
+    }
+
+    @media (max-width: 760px) {
+        .dashboard-grid,
+        .camera-grid {
+            grid-template-columns: 1fr;
         }
 
-        header {
-            background-color: #2f5d3a;
-            color: white;
-            padding: 30px;
+        .event-heading {
+            flex-direction: column;
         }
 
-        h1 {
-            margin: 0;
-            font-size: 42px;
+        .camera-unavailable {
+            min-height: 210px;
         }
 
-        .subtitle {
-            margin-top: 8px;
-            font-size: 18px;
+        .unavailable-message {
+            min-height: 170px;
         }
-
-        .content {
-            max-width: 900px;
-            margin: 40px auto;
-            padding: 20px;
-        }
-
-        .card {
-            background: white;
-            border-radius: 12px;
-            padding: 30px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.12);
-        }
-
-        .status {
-            color: #2f5d3a;
-            font-weight: bold;
-            font-size: 20px;
-        }
+    }
     </style>
 </head>
 
@@ -54,58 +242,570 @@
 
 <header>
     <h1>🐿️ SquirrelCam</h1>
-    <div class="subtitle">
-        Squirrel Detection & Deterrent System
-    </div>
+    <p>Dual-camera squirrel detection and deterrent system</p>
 </header>
 
-<div class="content">
 
-    <div class="card">
-        <h2>SquirrelCam is Online</h2>
+    <main>
+        <div class="dashboard-grid">
+            <section class="dashboard-card">
+                <h2>💦 Today's Activity</h2>
+                <div class="metric">5</div>
+                <div>sprays today</div>
+            </section>
 
-        <p class="status">
-            ● System Active
-        </p>
+            <section class="dashboard-card">
+                <h2>💧 Water Tank</h2>
+                <div class="water-status">
+                    <span>5-gallon supply</span>
+                    <span>Sensor coming soon</span>
+                </div>
+                <div class="water-track">
+                    <div class="water-fill"></div>
+                </div>
+            </section>
+        </div>
 
-        <p>
-            Monitoring the bird feeder for unwanted visitors.
-        </p>
+        
+        <h2 class="section-title">Latest Detection</h2>
+        <div class="dashboard-card">
+            <img class="latest-image"
+                 src="detections/latest.jpg"
+                 alt="Latest SquirrelCam detection">
+        </div>
+        
 
-        <p>
-            Latest squirrel detection and reaction from the feeder.
-        </p>
+        <h2 class="section-title">Latest Reactions</h2>
+        
+    <article class="event-card" data-event-id="20261108-091406">
+        <div class="event-heading">
+            <div>
+                <h3>November 8, 2026 • 9:14 AM</h3>
+                <div class="event-subtitle">Spray event</div>
+            </div>
 
-                        <h3>Latest Detection</h3>
+            <div class="event-actions">
+                <button class="stat-button" disabled title="Likes coming soon">
+                    ❤️ <span>0</span>
+                </button>
+                <button class="stat-button" disabled title="Views coming soon">
+                    👁 <span>0</span>
+                </button>
+            </div>
+        </div>
 
-            <p id="latest-timestamp" style="color:#666; font-size:14px;">
-    November 8, 2026 • 9:14 am
-</p>
-
-            <img src="detections/latest.jpg" alt="Latest SquirrelCam Detection" style="max-width:100%; border-radius:10px;">
-
-            <h3>Latest Reaction Video</h3>
-
-            <p id="latest-video-timestamp" style="color:#666; font-size:14px;">
-    November 8, 2026 • 9:14 am
-</p>
-
-            <video controls playsinline preload="metadata" style="max-width:100%; border-radius:10px;">
-                <source src="videos/latest.mp4" type="video/mp4">
+        <div class="camera-grid">
+            
+        <div class="camera-panel">
+            <div class="camera-label">Color Camera</div>
+            <video controls playsinline preload="metadata">
+                <source src="videos/archive/20261108-091406_spray.mp4" type="video/mp4">
                 Your browser does not support video playback.
             </video>
+        </div>
+        
+            
+        <div class="camera-panel">
+            <div class="camera-label">Global-Shutter Reaction Camera</div>
+            <video controls playsinline preload="metadata">
+                <source src="videos/archive/20261108-091406_reaction.mp4" type="video/mp4">
+                Your browser does not support video playback.
+            </video>
+        </div>
+        
+        </div>
+    </article>
+    
 
-            <p style="margin-top:20px;">
-                <a href="library.html" style="font-weight:bold; text-decoration:none;">
-                    🐿️ View Reaction Library →
-                </a>
-            </p>
+    <article class="event-card" data-event-id="20261108-083107">
+        <div class="event-heading">
+            <div>
+                <h3>November 8, 2026 • 8:31 AM</h3>
+                <div class="event-subtitle">Spray event</div>
+            </div>
 
-           
+            <div class="event-actions">
+                <button class="stat-button" disabled title="Likes coming soon">
+                    ❤️ <span>0</span>
+                </button>
+                <button class="stat-button" disabled title="Views coming soon">
+                    👁 <span>0</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="camera-grid">
+            
+        <div class="camera-panel">
+            <div class="camera-label">Color Camera</div>
+            <video controls playsinline preload="metadata">
+                <source src="videos/archive/20261108-083107_spray.mp4" type="video/mp4">
+                Your browser does not support video playback.
+            </video>
+        </div>
+        
+            
+    <div class="camera-panel camera-unavailable">
+        <div class="camera-label">Global-Shutter Reaction Camera</div>
+        <div class="unavailable-message">
+            Reaction camera was not available for this event
+        </div>
     </div>
+    
+        </div>
+    </article>
+    
 
-</div>
+    <article class="event-card" data-event-id="20261108-080757">
+        <div class="event-heading">
+            <div>
+                <h3>November 8, 2026 • 8:07 AM</h3>
+                <div class="event-subtitle">Spray event</div>
+            </div>
+
+            <div class="event-actions">
+                <button class="stat-button" disabled title="Likes coming soon">
+                    ❤️ <span>0</span>
+                </button>
+                <button class="stat-button" disabled title="Views coming soon">
+                    👁 <span>0</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="camera-grid">
+            
+        <div class="camera-panel">
+            <div class="camera-label">Color Camera</div>
+            <video controls playsinline preload="metadata">
+                <source src="videos/archive/20261108-080757_spray.mp4" type="video/mp4">
+                Your browser does not support video playback.
+            </video>
+        </div>
+        
+            
+    <div class="camera-panel camera-unavailable">
+        <div class="camera-label">Global-Shutter Reaction Camera</div>
+        <div class="unavailable-message">
+            Reaction camera was not available for this event
+        </div>
+    </div>
+    
+        </div>
+    </article>
+    
+
+    <article class="event-card" data-event-id="20261108-073716">
+        <div class="event-heading">
+            <div>
+                <h3>November 8, 2026 • 7:37 AM</h3>
+                <div class="event-subtitle">Spray event</div>
+            </div>
+
+            <div class="event-actions">
+                <button class="stat-button" disabled title="Likes coming soon">
+                    ❤️ <span>0</span>
+                </button>
+                <button class="stat-button" disabled title="Views coming soon">
+                    👁 <span>0</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="camera-grid">
+            
+        <div class="camera-panel">
+            <div class="camera-label">Color Camera</div>
+            <video controls playsinline preload="metadata">
+                <source src="videos/archive/20261108-073716_spray.mp4" type="video/mp4">
+                Your browser does not support video playback.
+            </video>
+        </div>
+        
+            
+    <div class="camera-panel camera-unavailable">
+        <div class="camera-label">Global-Shutter Reaction Camera</div>
+        <div class="unavailable-message">
+            Reaction camera was not available for this event
+        </div>
+    </div>
+    
+        </div>
+    </article>
+    
+
+    <article class="event-card" data-event-id="20261108-071205">
+        <div class="event-heading">
+            <div>
+                <h3>November 8, 2026 • 7:12 AM</h3>
+                <div class="event-subtitle">Spray event</div>
+            </div>
+
+            <div class="event-actions">
+                <button class="stat-button" disabled title="Likes coming soon">
+                    ❤️ <span>0</span>
+                </button>
+                <button class="stat-button" disabled title="Views coming soon">
+                    👁 <span>0</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="camera-grid">
+            
+        <div class="camera-panel">
+            <div class="camera-label">Color Camera</div>
+            <video controls playsinline preload="metadata">
+                <source src="videos/archive/20261108-071205_spray.mp4" type="video/mp4">
+                Your browser does not support video playback.
+            </video>
+        </div>
+        
+            
+    <div class="camera-panel camera-unavailable">
+        <div class="camera-label">Global-Shutter Reaction Camera</div>
+        <div class="unavailable-message">
+            Reaction camera was not available for this event
+        </div>
+    </div>
+    
+        </div>
+    </article>
+    
+
+    <article class="event-card" data-event-id="20261107-161654">
+        <div class="event-heading">
+            <div>
+                <h3>November 7, 2026 • 4:16 PM</h3>
+                <div class="event-subtitle">Spray event</div>
+            </div>
+
+            <div class="event-actions">
+                <button class="stat-button" disabled title="Likes coming soon">
+                    ❤️ <span>0</span>
+                </button>
+                <button class="stat-button" disabled title="Views coming soon">
+                    👁 <span>0</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="camera-grid">
+            
+        <div class="camera-panel">
+            <div class="camera-label">Color Camera</div>
+            <video controls playsinline preload="metadata">
+                <source src="videos/archive/20261107-161654_spray.mp4" type="video/mp4">
+                Your browser does not support video playback.
+            </video>
+        </div>
+        
+            
+    <div class="camera-panel camera-unavailable">
+        <div class="camera-label">Global-Shutter Reaction Camera</div>
+        <div class="unavailable-message">
+            Reaction camera was not available for this event
+        </div>
+    </div>
+    
+        </div>
+    </article>
+    
+
+    <article class="event-card" data-event-id="20261107-161543">
+        <div class="event-heading">
+            <div>
+                <h3>November 7, 2026 • 4:15 PM</h3>
+                <div class="event-subtitle">Spray event</div>
+            </div>
+
+            <div class="event-actions">
+                <button class="stat-button" disabled title="Likes coming soon">
+                    ❤️ <span>0</span>
+                </button>
+                <button class="stat-button" disabled title="Views coming soon">
+                    👁 <span>0</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="camera-grid">
+            
+        <div class="camera-panel">
+            <div class="camera-label">Color Camera</div>
+            <video controls playsinline preload="metadata">
+                <source src="videos/archive/20261107-161543_spray.mp4" type="video/mp4">
+                Your browser does not support video playback.
+            </video>
+        </div>
+        
+            
+    <div class="camera-panel camera-unavailable">
+        <div class="camera-label">Global-Shutter Reaction Camera</div>
+        <div class="unavailable-message">
+            Reaction camera was not available for this event
+        </div>
+    </div>
+    
+        </div>
+    </article>
+    
+
+    <article class="event-card" data-event-id="20261107-161502">
+        <div class="event-heading">
+            <div>
+                <h3>November 7, 2026 • 4:15 PM</h3>
+                <div class="event-subtitle">Spray event</div>
+            </div>
+
+            <div class="event-actions">
+                <button class="stat-button" disabled title="Likes coming soon">
+                    ❤️ <span>0</span>
+                </button>
+                <button class="stat-button" disabled title="Views coming soon">
+                    👁 <span>0</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="camera-grid">
+            
+        <div class="camera-panel">
+            <div class="camera-label">Color Camera</div>
+            <video controls playsinline preload="metadata">
+                <source src="videos/archive/20261107-161502_spray.mp4" type="video/mp4">
+                Your browser does not support video playback.
+            </video>
+        </div>
+        
+            
+    <div class="camera-panel camera-unavailable">
+        <div class="camera-label">Global-Shutter Reaction Camera</div>
+        <div class="unavailable-message">
+            Reaction camera was not available for this event
+        </div>
+    </div>
+    
+        </div>
+    </article>
+    
+
+    <article class="event-card" data-event-id="20261107-161446">
+        <div class="event-heading">
+            <div>
+                <h3>November 7, 2026 • 4:14 PM</h3>
+                <div class="event-subtitle">Spray event</div>
+            </div>
+
+            <div class="event-actions">
+                <button class="stat-button" disabled title="Likes coming soon">
+                    ❤️ <span>0</span>
+                </button>
+                <button class="stat-button" disabled title="Views coming soon">
+                    👁 <span>0</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="camera-grid">
+            
+        <div class="camera-panel">
+            <div class="camera-label">Color Camera</div>
+            <video controls playsinline preload="metadata">
+                <source src="videos/archive/20261107-161446_spray.mp4" type="video/mp4">
+                Your browser does not support video playback.
+            </video>
+        </div>
+        
+            
+    <div class="camera-panel camera-unavailable">
+        <div class="camera-label">Global-Shutter Reaction Camera</div>
+        <div class="unavailable-message">
+            Reaction camera was not available for this event
+        </div>
+    </div>
+    
+        </div>
+    </article>
+    
+
+    <article class="event-card" data-event-id="20261107-161421">
+        <div class="event-heading">
+            <div>
+                <h3>November 7, 2026 • 4:14 PM</h3>
+                <div class="event-subtitle">Spray event</div>
+            </div>
+
+            <div class="event-actions">
+                <button class="stat-button" disabled title="Likes coming soon">
+                    ❤️ <span>0</span>
+                </button>
+                <button class="stat-button" disabled title="Views coming soon">
+                    👁 <span>0</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="camera-grid">
+            
+        <div class="camera-panel">
+            <div class="camera-label">Color Camera</div>
+            <video controls playsinline preload="metadata">
+                <source src="videos/archive/20261107-161421_spray.mp4" type="video/mp4">
+                Your browser does not support video playback.
+            </video>
+        </div>
+        
+            
+    <div class="camera-panel camera-unavailable">
+        <div class="camera-label">Global-Shutter Reaction Camera</div>
+        <div class="unavailable-message">
+            Reaction camera was not available for this event
+        </div>
+    </div>
+    
+        </div>
+    </article>
+    
+
+        <h2 class="section-title">Browse by Day</h2>
+        <section class="history-card">
+            
+        <div class="history-row">
+            <a href="days/20261108.html">November 8, 2026</a>
+            <strong>5 sprays</strong>
+        </div>
+        
+        <div class="history-row">
+            <a href="days/20261107.html">November 7, 2026</a>
+            <strong>19 sprays</strong>
+        </div>
+        
+        </section>
+    </main>
+    
+
+<footer>
+    SquirrelCam • Raspberry Pi wildlife monitoring
+</footer>
+
+<!-- ===== START DUAL CAMERA SYNC ===== -->
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    const eventCards = document.querySelectorAll(".event-card");
+
+    function pauseOtherEvents(activeCard) {
+
+        eventCards.forEach(card => {
+
+            if (card === activeCard) return;
+
+            card.querySelectorAll("video").forEach(video => {
+                video.pause();
+            });
+
+        });
+
+    }
+
+    eventCards.forEach(card => {
+
+        const videos = Array.from(
+            card.querySelectorAll("video")
+        );
+
+        if (videos.length === 0) return;
+
+        let syncing = false;
+
+        function syncTo(master) {
+
+            if (syncing) return;
+
+            syncing = true;
+
+            pauseOtherEvents(card);
+
+            videos.forEach(video => {
+
+                if (video === master) return;
+
+                if (
+                    Math.abs(
+                        video.currentTime - master.currentTime
+                    ) > 0.08
+                ) {
+
+                    video.currentTime = Math.min(
+                        Math.max(0, master.currentTime - 0.15),
+                        video.duration || master.currentTime
+                    );
+
+                }
+
+                if (
+                    !master.paused &&
+                    video.paused
+                ) {
+
+                    video.play().catch(() => {});
+
+                }
+
+                if (
+                    master.paused &&
+                    !video.paused
+                ) {
+
+                    video.pause();
+
+                }
+
+            });
+
+            syncing = false;
+
+        }
+
+        videos.forEach(video => {
+
+            video.addEventListener("play", () => {
+
+                pauseOtherEvents(card);
+                syncTo(video);
+
+            });
+
+            video.addEventListener("pause", () => {
+
+                syncTo(video);
+
+            });
+
+            video.addEventListener("seeking", () => {
+
+                syncTo(video);
+
+            });
+
+            video.addEventListener("timeupdate", () => {
+
+                if (!video.paused) {
+                    syncTo(video);
+                }
+
+            });
+
+        });
+
+    });
+
+});
+</script>
+
+<!-- ===== END DUAL CAMERA SYNC ===== -->
 
 </body>
 </html>
-<!-- Updated from SquirrelCam Raspberry Pi -->
