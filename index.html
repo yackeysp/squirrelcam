@@ -250,7 +250,7 @@
         <div class="dashboard-grid">
             <section class="dashboard-card">
                 <h2>💦 Today's Activity</h2>
-                <div class="metric">30</div>
+                <div class="metric">0</div>
                 <div>sprays today</div>
             </section>
 
@@ -258,10 +258,12 @@
                 <h2>💧 Water Tank</h2>
                 <div class="water-status">
                     <span>5-gallon supply</span>
-                    <span>Sensor coming soon</span>
+                    <span>100%</span>
                 </div>
                 <div class="water-track">
-                    <div class="water-fill"></div>
+                    <div class="water-fill"
+                         style="width:100%; background:#3f9b58;">
+                    </div>
                 </div>
             </section>
         </div>
@@ -305,13 +307,14 @@
         </div>
         
             
-    <div class="camera-panel camera-unavailable">
-        <div class="camera-label">Global-Shutter Reaction Camera</div>
-        <div class="unavailable-message">
-            Reaction camera was not available for this event
+        <div class="camera-panel">
+            <div class="camera-label">Global-Shutter Reaction Camera</div>
+            <video controls playsinline preload="metadata">
+                <source src="videos/archive/20261108-143450_reaction.mp4" type="video/mp4">
+                Your browser does not support video playback.
+            </video>
         </div>
-    </div>
-    
+        
         </div>
     </article>
     
