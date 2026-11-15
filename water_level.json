@@ -1,6 +1,6 @@
 {
-  "percentage": 13,
-  "distance_mm": 285.0,
-  "status": "LOW",
-  "updated": "2026-11-15T13:37:04"
+  "percentage": 100,
+  "distance_mm": 33.0,
+  "status": "OK",
+  "updated": "2026-11-15T16:42:28"
 }
